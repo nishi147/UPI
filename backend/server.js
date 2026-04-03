@@ -11,8 +11,9 @@ const app = express();
 
 // Init Middleware
 app.use(cors({
-  origin: "https://upi-v8lr.vercel.app", // tera frontend URL
+  origin: "https://upi-v8lr.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
 app.use(express.json());
