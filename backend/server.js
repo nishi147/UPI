@@ -10,7 +10,11 @@ connectDB();
 const app = express();
 
 // Init Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://upi-v8lr.vercel.app", // tera frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
