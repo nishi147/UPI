@@ -22,7 +22,7 @@ exports.updateConfig = async (req, res) => {
         if (req.body.companyName) config.companyName = req.body.companyName;
         if (req.body.upiId) config.upiId = req.body.upiId;
         if (req.file) {
-            config.qrCodeUrl = `/uploads/${req.file.filename}`;
+            config.qrCodeUrl = req.file.path;
         }
         
         await config.save();

@@ -1,38 +1,30 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-    destination(req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename(req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dthwzsl69',
+  api_key: process.env.CLOUDINARY_API_KEY || '947577268937244',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'rof5UNzuHapNE-3hD9xQtpxXUWo'
 });
 
-const checkFileType = (file, cb) => {
-    const filetypes = /jpg|jpeg|png/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-        return cb(null, true);
-    } else {
-        cb('Images only! (JPG/PNG)');
-    }
-};
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'upi-payments',
+    allowed_formats: ['jpg', 'png', 'jpeg']
+  }
+});
 
 const upload = multer({
-    storage,
-    fileFilter: function(req, file, cb) {
-        checkFileType(file, cb);
+  storage: storage,
+  fileFilter: function(req, file, cb) {
+    if (!file.mimetype.match(/jpeg|jpg|png|gif/)) {
+        cb(new Error('Images only! (JPG/PNG)'), false);
+        return;
     }
+    cb(null, true);
+  }
 });
 
 module.exports = upload;

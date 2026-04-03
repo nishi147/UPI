@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                             {config.qrCodeUrl && (
                                 <div className="mt-4">
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Current QR Code:</p>
-                                    <img src={`https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR" style={{ maxHeight: '100px', borderRadius: '8px' }} />
+                                    <img src={config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR" style={{ maxHeight: '100px', borderRadius: '8px' }} />
                                 </div>
                             )}
                         </div>
@@ -166,8 +166,8 @@ const AdminDashboard = () => {
                                     <td>{payment.transactionId || 'N/A'}</td>
                                     <td>{new Date(payment.createdAt).toLocaleString()}</td>
                                     <td>
-                                        <a href={`https://upi-jet.vercel.app/${payment.screenshotUrl}`} target="_blank" rel="noreferrer">
-                                            <img src={`https://upi-jet.vercel.app/${payment.screenshotUrl}`} alt="proof" className="preview-img" />
+                                        <a href={payment.screenshotUrl?.startsWith('http') ? payment.screenshotUrl : `https://upi-jet.vercel.app/${payment.screenshotUrl}`} target="_blank" rel="noreferrer">
+                                            <img src={payment.screenshotUrl?.startsWith('http') ? payment.screenshotUrl : `https://upi-jet.vercel.app/${payment.screenshotUrl}`} alt="proof" className="preview-img" />
                                         </a>
                                     </td>
                                     <td>

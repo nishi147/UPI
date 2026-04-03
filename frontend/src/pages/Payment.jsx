@@ -61,7 +61,7 @@ const Payment = () => {
                     {config && config.qrCodeUrl ? (
                         <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <a href={getUpiLink()}>
-                                <img src={`https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR Code" style={{ width: '250px', height: '250px', objectFit: 'contain', borderRadius: '12px', border: '8px solid var(--primary)', marginBottom: '1rem' }} />
+                                <img src={config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR Code" style={{ width: '250px', height: '250px', objectFit: 'contain', borderRadius: '12px', border: '8px solid var(--primary)', marginBottom: '1rem' }} />
                             </a>
                             <a href={getUpiLink()} className="btn btn-success" style={{ width: '100%', maxWidth: '250px' }}>Pay via UPI App</a>
                         </div>

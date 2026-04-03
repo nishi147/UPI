@@ -7,7 +7,7 @@ exports.uploadPaymentProof = async (req, res) => {
         }
         
         const { transactionId } = req.body;
-        const screenshotUrl = `/uploads/${req.file.filename}`;
+        const screenshotUrl = req.file.path;
 
         const payment = await Payment.create({
             user: req.user._id,
