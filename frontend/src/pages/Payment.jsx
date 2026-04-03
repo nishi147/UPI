@@ -47,11 +47,10 @@ const Payment = () => {
     };
     const getUpiLink = () => {
         if (!config || !config.upiId) return '#';
-        // Do not encode @ in UPI ID, as some apps (PhonePe/Paytm) fail to parse %40 and restrict payment
         const pa = config.upiId.trim();
-        const pn = encodeURIComponent((config.companyName || '').trim());
-        // Adding mc=0000 (default merchant category), mode=02 (secure intent), and purpose=00
-        return `upi://pay?pa=${pa}&pn=${pn}&mc=0000&mode=02&purpose=00&cu=INR`;
+        // Just replace spaces for the payee name to avoid strict encoding issues
+        const pn = (config.companyName || '').trim().replace(/ /g, '+');
+        return `upi://pay?pa=${pa}&pn=${pn}&cu=INR`;
     };
 
     return (
