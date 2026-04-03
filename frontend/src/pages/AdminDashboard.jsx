@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                             {config.qrCodeUrl && (
                                 <div className="mt-4">
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Current QR Code:</p>
-                                    <img src={`http://localhost:5000${config.qrCodeUrl}`} alt="QR" style={{ maxHeight: '100px', borderRadius: '8px' }} />
+                                    <img src={`https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR" style={{ maxHeight: '100px', borderRadius: '8px' }} />
                                 </div>
                             )}
                         </div>
@@ -166,8 +166,8 @@ const AdminDashboard = () => {
                                     <td>{payment.transactionId || 'N/A'}</td>
                                     <td>{new Date(payment.createdAt).toLocaleString()}</td>
                                     <td>
-                                        <a href={`http://localhost:5000${payment.screenshotUrl}`} target="_blank" rel="noreferrer">
-                                            <img src={`http://localhost:5000${payment.screenshotUrl}`} alt="proof" className="preview-img" />
+                                        <a href={`https://upi-jet.vercel.app/${payment.screenshotUrl}`} target="_blank" rel="noreferrer">
+                                            <img src={`https://upi-jet.vercel.app/${payment.screenshotUrl}`} alt="proof" className="preview-img" />
                                         </a>
                                     </td>
                                     <td>
