@@ -4,18 +4,18 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const connectDB = require('../config/db');
 
-connectDB();
-
 const seedAdmin = async () => {
     try {
+        await connectDB();
+
         const adminExists = await User.findOne({ email: 'admin@example.com' });
+
         if (adminExists) {
             console.log('Admin user already exists');
             process.exit();
         }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash('admin123', salt);
+        const hashedPassword = await bcrypt.hash('admin123', 10);
 
         await User.create({
             name: 'Admin User',
@@ -25,10 +25,11 @@ const seedAdmin = async () => {
             role: 'admin'
         });
 
-        console.log('Admin user seeded successfully');
+        console.log('✅ Admin user seeded successfully');
         process.exit();
+
     } catch (error) {
-        console.error(error);
+        console.error('❌ Error:', error);
         process.exit(1);
     }
 };
