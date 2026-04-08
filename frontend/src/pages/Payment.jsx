@@ -51,9 +51,12 @@ const Payment = () => {
     const getUpiLink = () => {
         if (!config || !config.upiId) return '#';
         const pa = config.upiId.trim();
-        const pn = (config.companyName || 'Payment').trim().replace(/ /g, '+');
+        const pn = encodeURIComponent((config.companyName || 'Payment').trim());
         let link = `upi://pay?pa=${pa}&pn=${pn}&cu=INR`;
-        if (amount) link += `&am=${amount}`;
+        if (amount && !isNaN(parseFloat(amount))) {
+            const formattedAmount = parseFloat(amount).toFixed(2);
+            link += `&am=${formattedAmount}`;
+        }
         return link;
     };
 
