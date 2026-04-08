@@ -11,6 +11,7 @@ const Payment = () => {
     const [error, setError] = useState('');
     const [config, setConfig] = useState(null);
     const [copySuccess, setCopySuccess] = useState(false);
+    const [showScannerHelp, setShowScannerHelp] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -78,6 +79,53 @@ const Payment = () => {
         }
     };
 
+    const ScannerModal = () => (
+        <div className="modal-overlay" onClick={() => setShowScannerHelp(false)}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h3>Scan & Pay Guide</h3>
+                    <button className="close-btn" onClick={() => setShowScannerHelp(false)}>✕</button>
+                </div>
+                <div className="modal-body text-left">
+                    <p className="mb-4" style={{fontSize: '0.9rem', color: 'var(--text-muted)'}}>
+                        Use this method if the 'Pay via UPI App' button shows a security warning.
+                    </p>
+                    
+                    <div className="step-item">
+                        <div className="step-num">1</div>
+                        <div className="step-text">
+                            <strong>Download QR Code</strong>
+                            <p>Save the QR banner to your phone's gallery</p>
+                            <button onClick={downloadQR} className="btn btn-secondary mt-2" style={{padding: '0.4rem 0.8rem', fontSize: '0.8rem'}}>Download Now</button>
+                        </div>
+                    </div>
+
+                    <div className="step-item">
+                        <div className="step-num">2</div>
+                        <div className="step-text">
+                            <strong>Open any UPI App</strong>
+                            <p>Launch your preferred payment app</p>
+                            <div className="flex gap-4 mt-2">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/1200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" style={{height: '20px'}} />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Pay_Logo_%282020%29.svg/1024px-Google_Pay_Logo_%282020%29.svg.png" alt="GPay" style={{height: '20px'}} />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/1200px-PhonePe_Logo.svg.png" alt="PhonePe" style={{height: '20px'}} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="step-item">
+                        <div className="step-num">3</div>
+                        <div className="step-text">
+                            <strong>Select 'Scan from Gallery'</strong>
+                            <p>Look for the gallery icon in the app's QR scanner and select the downloaded image.</p>
+                        </div>
+                    </div>
+                </div>
+                <button className="btn btn-primary w-full mt-4" onClick={() => setShowScannerHelp(false)}>Got it!</button>
+            </div>
+        </div>
+    );
+
     return (
         <div className="container">
             {copySuccess && (
@@ -85,6 +133,7 @@ const Payment = () => {
                     ✅ UPI ID copied to clipboard!
                 </div>
             )}
+            {showScannerHelp && <ScannerModal />}
             <h2 className="mb-4 text-gradient">Complete Your Payment</h2>
             <div className="grid grid-cols-2 gap-6">
                 <div className="glass-panel" style={{ textAlign: 'center' }}>
@@ -94,9 +143,12 @@ const Payment = () => {
                             <a href={getUpiLink()}>
                                 <img src={config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR Code" style={{ width: '250px', height: '250px', objectFit: 'contain', borderRadius: '12px', border: '8px solid var(--primary)', marginBottom: '1rem' }} />
                             </a>
-                            <div className="flex flex-col gap-4 w-full" style={{ maxWidth: '250px' }}>
-                                <a href={getUpiLink()} className="btn btn-success" style={{ width: '100%' }}>Pay via UPI App</a>
-                                <button onClick={downloadQR} className="btn btn-secondary" style={{ width: '100%', fontSize: '0.9rem' }}>Download QR Code</button>
+                            <div className="flex flex-col gap-4 w-full" style={{ maxWidth: '280px' }}>
+                                <a href={getUpiLink()} className="btn btn-success" style={{ width: '100%', borderRadius: '24px' }}>Pay via UPI App</a>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button onClick={() => setShowScannerHelp(true)} className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.6rem' }}>Scan & Pay</button>
+                                    <button onClick={downloadQR} className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.6rem' }}>Download QR</button>
+                                </div>
                             </div>
                         </div>
                     ) : (
