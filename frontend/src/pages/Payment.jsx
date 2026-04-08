@@ -114,10 +114,10 @@ const Payment = () => {
                         <div className="step-text">
                             <strong>Open any UPI App</strong>
                             <p>Launch your preferred payment app</p>
-                            <div className="flex gap-4 mt-2">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/1200px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" style={{height: '20px'}} />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Pay_Logo_%282020%29.svg/1024px-Google_Pay_Logo_%282020%29.svg.png" alt="GPay" style={{height: '20px'}} />
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/1200px-PhonePe_Logo.svg.png" alt="PhonePe" style={{height: '20px'}} />
+                            <div className="flex gap-4 mt-2 items-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Paytm_Logo_%28standalone%29.svg/512px-Paytm_Logo_%28standalone%29.svg.png" alt="Paytm" style={{height: '20px', objectFit: 'contain'}} />
+                                <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-pay-icon.png" alt="GPay" style={{height: '24px', objectFit: 'contain'}} />
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" alt="PhonePe" style={{height: '20px', objectFit: 'contain'}} />
                             </div>
                         </div>
                     </div>
