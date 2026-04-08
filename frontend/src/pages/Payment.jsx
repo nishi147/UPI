@@ -61,14 +61,23 @@ const Payment = () => {
         return link;
     };
 
-    const downloadQR = () => {
+    const downloadQR = async () => {
         if (!config || !config.qrCodeUrl) return;
-        const link = document.createElement('a');
-        link.href = config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`;
-        link.download = 'payment-qr.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            const imageUrl = config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`;
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'payment-qr.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            window.open(config.qrCodeUrl, '_blank');
+        }
     };
 
     const copyToClipboard = () => {
