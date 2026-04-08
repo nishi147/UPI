@@ -51,9 +51,20 @@ const Payment = () => {
     const getUpiLink = () => {
         if (!config || !config.upiId) return '#';
         const pa = config.upiId.trim();
-        // Just replace spaces for the payee name to avoid strict encoding issues
-        const pn = (config.companyName || '').trim().replace(/ /g, '+');
-        return `upi://pay?pa=${pa}&pn=${pn}&cu=INR`;
+        const pn = (config.companyName || 'Payment').trim().replace(/ /g, '+');
+        let link = `upi://pay?pa=${pa}&pn=${pn}&cu=INR`;
+        if (amount) link += `&am=${amount}`;
+        return link;
+    };
+
+    const downloadQR = () => {
+        if (!config || !config.qrCodeUrl) return;
+        const link = document.createElement('a');
+        link.href = config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`;
+        link.download = 'payment-qr.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const copyToClipboard = () => {
@@ -80,7 +91,10 @@ const Payment = () => {
                             <a href={getUpiLink()}>
                                 <img src={config.qrCodeUrl?.startsWith('http') ? config.qrCodeUrl : `https://upi-jet.vercel.app/${config.qrCodeUrl}`} alt="QR Code" style={{ width: '250px', height: '250px', objectFit: 'contain', borderRadius: '12px', border: '8px solid var(--primary)', marginBottom: '1rem' }} />
                             </a>
-                            <a href={getUpiLink()} className="btn btn-success" style={{ width: '100%', maxWidth: '250px' }}>Pay via UPI App</a>
+                            <div className="flex flex-col gap-4 w-full" style={{ maxWidth: '250px' }}>
+                                <a href={getUpiLink()} className="btn btn-success" style={{ width: '100%' }}>Pay via UPI App</a>
+                                <button onClick={downloadQR} className="btn btn-secondary" style={{ width: '100%', fontSize: '0.9rem' }}>Download QR Code</button>
+                            </div>
                         </div>
                     ) : (
                         <div className="qr-placeholder">
@@ -98,7 +112,15 @@ const Payment = () => {
                         </div>
                     )}
                     <p style={{ color: 'var(--text-muted)' }}>{config?.companyName !== 'SA APPARELS' ? config?.companyName : ''}</p>
-                    <p style={{ color: 'var(--text-muted)', marginTop: '1rem', fontSize: '0.9rem' }}>Please verify the amount and recipient before sending the payment.</p>
+                    
+                    <div className="troubleshoot-box mt-8">
+                        <p style={{ fontWeight: '600', color: '#856404', marginBottom: '0.5rem', fontSize: '0.85rem' }}>⚠️ Facing Security Warnings?</p>
+                        <p style={{ fontSize: '0.8rem', color: '#856404' }}>
+                            If your app shows a 'Security Alert', please <strong>Download the QR</strong> and scan it from your UPI app gallery, or use <strong>Copy UPI ID</strong> to pay manually.
+                        </p>
+                    </div>
+                    
+                    <p style={{ color: 'var(--text-muted)', marginTop: '1.5rem', fontSize: '0.9rem' }}>Please verify the amount and recipient before sending the payment.</p>
                 </div>
                 
                 <div className="glass-panel">

@@ -131,6 +131,18 @@ a:hover {
   border-color: #ef4444;
 }
 
+.btn-secondary {
+  background: rgba(95, 99, 104, 0.1);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: rgba(95, 99, 104, 0.2);
+  color: var(--text-main);
+  border-color: var(--text-muted);
+}
+
 .btn-success {
   background: rgba(16, 185, 129, 0.1);
   color: #10b981;
@@ -285,6 +297,15 @@ tr:hover td {
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+.troubleshoot-box {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 1.25rem;
+  border-radius: 12px;
+  text-align: left;
+  border-left: 5px solid #ffc107;
 }
 
 /* Custom Overrides for QR Layout */
