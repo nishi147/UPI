@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: './backend/.env' });
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
@@ -9,13 +9,14 @@ const seedAdmin = async () => {
         await connectDB();
 
         const adminExists = await User.findOne({ email: 'admin@example.com' });
+        const hashedPassword = await bcrypt.hash('admin123', 10);
 
         if (adminExists) {
-            console.log('Admin user already exists');
+            adminExists.password = hashedPassword;
+            await adminExists.save();
+            console.log('✅ Admin password reset successfully');
             process.exit();
         }
-
-        const hashedPassword = await bcrypt.hash('admin123', 10);
 
         await User.create({
             name: 'Admin User',

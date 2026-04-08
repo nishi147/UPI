@@ -64,7 +64,7 @@ const AdminDashboard = () => {
     const filteredPayments = filter === 'all' ? payments : payments.filter(p => p.status === filter);
 
     const downloadCSV = () => {
-        const headers = ['User Name', 'Email', 'Phone', 'Transaction ID', 'Date', 'Status'];
+        const headers = ['User Name', 'Email', 'Phone', 'Transaction ID', 'Amount', 'Date', 'Status', 'Balance'];
         const escapeCsv = (str) => `"${String(str).replace(/"/g, '""')}"`;
         
         const rows = filteredPayments.map(p => [
@@ -72,8 +72,10 @@ const AdminDashboard = () => {
             p.user?.email || 'N/A',
             p.user?.phone || 'N/A',
             p.transactionId || 'N/A',
+            p.amount || 0,
             new Date(p.createdAt).toLocaleString(),
-            p.status
+            p.status,
+            p.user?.balance || 0
         ]);
         
         const csvRows = [headers.map(escapeCsv).join(',')];
@@ -149,9 +151,12 @@ const AdminDashboard = () => {
                             <tr>
                                 <th>User</th>
                                 <th>Transaction ID</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
                                 <th>Date</th>
                                 <th>Proof</th>
-                                <th>Status</th>
+                                <th>User Status</th>
+                                <th>Payment Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -164,11 +169,18 @@ const AdminDashboard = () => {
                                         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{payment.user?.phone}</div>
                                     </td>
                                     <td>{payment.transactionId || 'N/A'}</td>
+                                    <td><strong>₹{payment.amount || 0}</strong></td>
+                                    <td>₹{payment.user?.balance || 0}</td>
                                     <td>{new Date(payment.createdAt).toLocaleString()}</td>
                                     <td>
                                         <a href={payment.screenshotUrl?.startsWith('http') ? payment.screenshotUrl : `https://upi-jet.vercel.app/${payment.screenshotUrl}`} target="_blank" rel="noreferrer">
                                             <img src={payment.screenshotUrl?.startsWith('http') ? payment.screenshotUrl : `https://upi-jet.vercel.app/${payment.screenshotUrl}`} alt="proof" className="preview-img" />
                                         </a>
+                                    </td>
+                                    <td>
+                                        <span className={`badge badge-${payment.user?.isActive ? 'active' : 'inactive'}`}>
+                                            {payment.user?.isActive ? 'ACTIVE' : 'IN-ACTIVE'}
+                                        </span>
                                     </td>
                                     <td>
                                         <span className={`badge badge-${payment.status}`}>

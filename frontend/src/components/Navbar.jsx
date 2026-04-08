@@ -1,12 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import api from '../utils/api';
 import './Navbar.css';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [config, setConfig] = useState(null);
+
+    useEffect(() => {
+        api.get('/config').then(res => setConfig(res.data)).catch(console.error);
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -17,7 +23,7 @@ const Navbar = () => {
     return (
         <nav className="navbar" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
             <Link to="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', letterSpacing: '0.02em', fontStyle: 'italic' }} className="text-gradient">
-                SA APPARELS
+                {config?.companyName || 'SA APPARELS'}
             </Link>
             
             <div className="mobile-menu-icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>

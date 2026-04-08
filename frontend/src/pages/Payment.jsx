@@ -4,11 +4,13 @@ import api from '../utils/api';
 
 const Payment = () => {
     const [transactionId, setTransactionId] = useState('');
+    const [amount, setAmount] = useState('');
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
     const [config, setConfig] = useState(null);
+    const [copySuccess, setCopySuccess] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,6 +26,7 @@ const Payment = () => {
 
         const formData = new FormData();
         formData.append('transactionId', transactionId);
+        formData.append('amount', amount);
         formData.append('screenshot', file);
 
         setLoading(true);
@@ -53,8 +56,21 @@ const Payment = () => {
         return `upi://pay?pa=${pa}&pn=${pn}&cu=INR`;
     };
 
+    const copyToClipboard = () => {
+        if (config && config.upiId) {
+            navigator.clipboard.writeText(config.upiId);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 2000);
+        }
+    };
+
     return (
         <div className="container">
+            {copySuccess && (
+                <div className="toast-notification">
+                    ✅ UPI ID copied to clipboard!
+                </div>
+            )}
             <h2 className="mb-4 text-gradient">Complete Your Payment</h2>
             <div className="grid grid-cols-2 gap-6">
                 <div className="glass-panel" style={{ textAlign: 'center' }}>
@@ -72,11 +88,16 @@ const Payment = () => {
                         </div>
                     )}
                     {config && (
-                        <p style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                            UPI ID: {config.upiId}
-                        </p>
+                        <div className="mb-4">
+                            <p style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+                                UPI ID: {config.upiId}
+                            </p>
+                            <button className="btn btn-secondary" style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem' }} onClick={copyToClipboard}>
+                                (COPY UPI ID)
+                            </button>
+                        </div>
                     )}
-                    <p style={{ color: 'var(--text-muted)' }}>{config?.companyName}</p>
+                    <p style={{ color: 'var(--text-muted)' }}>{config?.companyName !== 'SA APPARELS' ? config?.companyName : ''}</p>
                     <p style={{ color: 'var(--text-muted)', marginTop: '1rem', fontSize: '0.9rem' }}>Please verify the amount and recipient before sending the payment.</p>
                 </div>
                 
@@ -90,12 +111,16 @@ const Payment = () => {
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
+                                <label>Amount <span style={{ color: 'red' }}>*</span></label>
+                                <input type="number" className="input" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount paid" required />
+                            </div>
+                            <div className="form-group">
                                 <label>Transaction ID (Optional)</label>
                                 <input type="text" className="input" value={transactionId} onChange={(e) => setTransactionId(e.target.value)} placeholder="e.g. T210..." />
                             </div>
                             <div className="form-group">
-                                <label>Screenshot (JPG/PNG)</label>
-                                <input type="file" className="input" accept="image/png, image/jpeg" onChange={(e) => setFile(e.target.files[0])} />
+                                <label>Screenshot (JPG/PNG) <span style={{ color: 'red' }}>*</span></label>
+                                <input type="file" className="input" accept="image/png, image/jpeg" onChange={(e) => setFile(e.target.files[0])} required />
                             </div>
                             <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '100%' }}>
                                 {loading ? 'Uploading...' : 'Submit Proof'}

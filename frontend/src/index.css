@@ -255,6 +255,37 @@ tr:hover td {
 .badge-pending { background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); }
 .badge-verified { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
 .badge-rejected { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.badge-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.badge-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+/* Toast Notifications */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #1a73e8;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out forwards;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
 /* Custom Overrides for QR Layout */
 .qr-placeholder {

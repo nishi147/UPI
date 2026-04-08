@@ -6,12 +6,13 @@ exports.uploadPaymentProof = async (req, res) => {
             return res.status(400).json({ message: 'Please upload a file' });
         }
         
-        const { transactionId } = req.body;
+        const { transactionId, amount } = req.body;
         const screenshotUrl = req.file.path;
 
         const payment = await Payment.create({
             user: req.user._id,
             transactionId: transactionId || '',
+            amount: amount,
             screenshotUrl,
             status: 'pending'
         });
@@ -34,7 +35,8 @@ exports.getMyPayments = async (req, res) => {
 exports.getAllPayments = async (req, res) => {
     try {
         // Admin gets all payments, populate user
-        const payments = await Payment.find().populate('user', 'name email phone').sort({ createdAt: -1 });
+        // Admin gets all payments, populate user including balance and status
+        const payments = await Payment.find().populate('user', 'name email phone balance isActive').sort({ createdAt: -1 });
         res.json(payments);
     } catch (error) {
         res.status(500).json({ message: error.message });
