@@ -175,7 +175,7 @@ const Payment = () => {
                             </button>
                         </div>
                     )}
-                    <p style={{ color: 'var(--text-muted)' }}>{config?.companyName !== 'SA APPARELS' ? config?.companyName : ''}</p>
+                    <p style={{ color: 'var(--text-muted)' }}>{config?.companyName || 'SA APPARELS'}</p>
                     
                     <div className="troubleshoot-box mt-8">
                         <p style={{ fontWeight: '600', color: '#856404', marginBottom: '0.5rem', fontSize: '0.85rem' }}>⚠️ Facing Security Warnings?</p>

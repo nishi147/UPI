@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import api from '../utils/api';
 
 const Home = () => {
+    const [config, setConfig] = useState(null);
+
+    useEffect(() => {
+        api.get('/config').then(res => setConfig(res.data)).catch(console.error);
+    }, []);
+
     return (
         <div className="container" style={{ textAlign: 'center', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h1 className="text-gradient" style={{ fontSize: '4rem', marginBottom: '1rem', fontStyle: 'italic' }}>SA APPARELS Payments</h1>
+            <h1 className="text-gradient" style={{ fontSize: '4rem', marginBottom: '1rem', fontStyle: 'italic' }}>
+                {config?.companyName || 'SA APPARELS'} Payments
+            </h1>
             <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem auto' }}>
                 Pay for products and services instantly with our secure, zero-hassle UPI integration. Upload your proof, and we handle the rest.
             </p>
@@ -17,3 +26,4 @@ const Home = () => {
 };
 
 export default Home;
+
